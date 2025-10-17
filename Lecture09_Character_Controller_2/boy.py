@@ -29,6 +29,9 @@ def a_down(e):
 def a_up(e):
     return e[0] == 'input' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
 
+def auto_time_out(e):
+    return e[0] == 'AUTO_TIME_OUT'
+
 class AutoRun:
     def __init__(self, boy):
         self.boy = boy
@@ -50,6 +53,9 @@ class AutoRun:
         elif self.boy.x > 800:
             self.boy.x = 800
             self.boy.dir = self.boy.face_dir = -1
+
+        if get_time() - self.boy.wait_start_time > 5.0:
+            self.boy.state_machine.handle_state_event(('AUTO_TIME_OUT', 0))
 
     def draw(self):
         if self.boy.face_dir == 1:
@@ -141,7 +147,7 @@ class Boy:
                 self.SLEEP: {space_down: self.IDLE, a_down: self.AUTORUN},
                 self.IDLE: {time_out: self.SLEEP, right_down: self.RUN, left_down: self.RUN, right_up: self.RUN, left_up: self.RUN, a_down: self.AUTORUN},
                 self.RUN: {right_up: self.IDLE, left_up: self.IDLE, right_down: self.IDLE, left_down: self.IDLE, a_down: self.AUTORUN},
-                self.AUTORUN: {a_down: self.IDLE}
+                self.AUTORUN: {a_down: self.IDLE,auto_time_out : self.IDLE}
             }
         )
 
