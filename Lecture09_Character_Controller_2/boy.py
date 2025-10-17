@@ -42,7 +42,7 @@ class AutoRun:
 
     def do(self):
         self.boy.frame = (self.boy.frame + 1) % 8
-        self.boy.x += self.boy.dir * 5
+        self.boy.x += self.boy.dir * 30
 
         if self.boy.x < 0:
             self.boy.x = 0
